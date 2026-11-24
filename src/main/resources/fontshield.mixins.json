@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.keviro.fontshield.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["FreeTypeMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

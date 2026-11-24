@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "fontshield",
+  "version": "${version}",
+  "name": "FontShield",
+  "description": "Disables FreeType hinting so TrueType bytecode from resource pack fonts never runs. Mitigates minecraft2shell.",
+  "authors": ["Keviro"],
+  "contact": {
+    "homepage": "https://github.com/Keviro/FontShield",
+    "sources": "https://github.com/Keviro/FontShield",
+    "issues": "https://github.com/Keviro/FontShield/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/fontshield/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["io.github.keviro.fontshield.FontShield"]
+  },
+  "mixins": ["fontshield.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.3"
+  }
+}

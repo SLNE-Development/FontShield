@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+        with:
+          cache-disabled: true
+
+      - name: Build
+        run: ./gradlew build -Pmod_version="${GITHUB_REF_NAME#v}"
+
+      - name: Checksums
+        working-directory: build/libs
+        run: sha256sum *.jar > SHA256SUMS.txt
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" build/libs/*.jar build/libs/SHA256SUMS.txt \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "FontShield ${GITHUB_REF_NAME#v}" \
+            --notes-file - <<'NOTES'
+          Client-side mitigation for **minecraft2shell** on Minecraft 26.3 (Fabric).
+
+          Drop the jar into your `mods` folder. Requires Fabric Loader, no Fabric API needed.
+          SHA-256 checksums are in `SHA256SUMS.txt`.
+          NOTES
